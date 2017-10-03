@@ -1,0 +1,4 @@
+name: "TICK Stack"
+description: "Open Source Time Series Platform consisting of Telegraf, InfluxDB, Chronograf, and Kapacitor provided by InfluxData"
+category: "Monitoring"
+version: "v0.1.0"
