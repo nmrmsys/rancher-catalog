@@ -2,3 +2,9 @@ version: '2'
 catalog:
   name: "TICK Stack"
   version: "v0.1.0"
+services:
+  tick-data:
+  telegraf:
+  influxdb:
+  chronograf:
+  kapacitor:
