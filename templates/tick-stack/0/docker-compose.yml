@@ -6,6 +6,9 @@ services:
     network_mode: none
     volumes:
         - /etc/telegraf
+    labels:
+      io.rancher.container.hostname_override: container_name
+      io.rancher.container.start_once: true
   # Define a Telegraf service
   telegraf:
     image: telegraf:1.4.0
@@ -19,6 +22,9 @@ services:
     #  - "8092:8092/udp"
     #  - "8094:8094"
     #  - "8125:8125/udp"
+    labels:
+      io.rancher.container.hostname_override: container_name
+      io.rancher.sidekicks: tick-data
   # Define an InfluxDB service
   influxdb:
     image: influxdb:1.2.4 # down 1.3.3
@@ -29,6 +35,8 @@ services:
       - "8083:8083"
     environment:
       INFLUXDB_ADMIN_ENABLED: 'true'
+    labels:
+      io.rancher.container.hostname_override: container_name
   # Define a Chronograf service
   chronograf:
     image: chronograf:1.3.8
@@ -40,6 +48,8 @@ services:
     links:
       - influxdb
       - kapacitor
+    labels:
+      io.rancher.container.hostname_override: container_name
   # Define a Kapacitor service
   kapacitor:
     image: kapacitor:1.3.3
@@ -50,6 +60,8 @@ services:
       - influxdb
     ports:
       - "9092:9092"
+    labels:
+      io.rancher.container.hostname_override: container_name
   # Define a service for using the influx CLI tool.
   # docker-compose run influxdb-cli
 #  influxdb-cli:

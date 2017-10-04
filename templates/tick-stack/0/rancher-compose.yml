@@ -2,21 +2,3 @@ version: '2'
 catalog:
   name: "TICK Stack"
   version: "v0.1.0"
-services:
-  tick-data:
-    labels:
-      io.rancher.container.hostname_override: container_name
-      io.rancher.container.start_once: true
-  telegraf:
-    labels:
-      io.rancher.container.hostname_override: container_name
-      io.rancher.sidekicks: tick-data
-  influxdb:
-    labels:
-      io.rancher.container.hostname_override: container_name
-  chronograf:
-    labels:
-      io.rancher.container.hostname_override: container_name
-  kapacitor:
-    labels:
-      io.rancher.container.hostname_override: container_name
