@@ -1,0 +1,93 @@
+version: '2'
+services:
+  # pre-configured Data Volume Container
+  tick-data:
+    image: nmrmsys/tick-data
+    tty: true
+    network_mode: none
+    volumes:
+        - /etc/telegraf
+        - /etc/kapacitor
+        - /var/lib/influxdb
+        - /var/lib/chronograf
+        - /var/lib/kapacitor
+    labels:
+      io.rancher.container.hostname_override: container_name
+  # Define a Telegraf service
+  telegraf:
+    image: telegraf:1.4.0
+    #volumes:
+    #  - ./etc/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    volumes_from:
+      - tick-data
+    links:
+      - influxdb
+    #ports:
+    #  - "8092:8092/udp"
+    #  - "8094:8094"
+    #  - "8125:8125/udp"
+    labels:
+      io.rancher.container.hostname_override: container_name
+      io.rancher.sidekicks: tick-data
+  # Define an InfluxDB service
+  influxdb:
+    image: influxdb:1.2.4 # down 1.3.3
+    #volumes:
+    #  - ./data/influxdb:/var/lib/influxdb
+    volumes_from:
+      - tick-data
+    ports:
+      - "8086:8086"
+      - "8083:8083"
+    environment:
+      INFLUXDB_ADMIN_ENABLED: 'true'
+    labels:
+      io.rancher.container.hostname_override: container_name
+  # Define a Chronograf service
+  chronograf:
+    image: chronograf:1.3.8
+    volumes_from:
+      - tick-data
+    environment:
+      INFLUXDB_URL: http://influxdb:8086
+      KAPACITOR_URL: http://kapacitor:9092
+    ports:
+      - "8888:8888"
+    links:
+      - influxdb
+      - kapacitor
+    labels:
+      io.rancher.container.hostname_override: container_name
+  # Define a Kapacitor service
+  kapacitor:
+    image: kapacitor:1.3.3
+    volumes_from:
+      - tick-data
+    environment:
+      KAPACITOR_HOSTNAME: kapacitor
+      KAPACITOR_INFLUXDB_0_URLS_0: http://influxdb:8086
+    links:
+      - influxdb
+    ports:
+      - "9092:9092"
+    labels:
+      io.rancher.container.hostname_override: container_name
+  # Define a service for using the influx CLI tool.
+  # docker-compose run influxdb-cli
+#  influxdb-cli:
+#    image: influxdb:1.3.5
+#    entrypoint:
+#      - influx
+#      - -host
+#      - influxdb
+#    links:
+#      - influxdb
+  # Define a service for using the kapacitor CLI tool.
+  # docker-compose run kapacitor-cli
+#  kapacitor-cli:
+#    image: kapacitor:1.3.3
+#    entrypoint: bash
+#    environment:
+#      KAPACITOR_URL: http://kapacitor:9092
+#    links:
+#      - kapacitor
