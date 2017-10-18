@@ -43,6 +43,7 @@ services:
       INFLUXDB_ADMIN_ENABLED: 'true'
     labels:
       io.rancher.container.hostname_override: container_name
+      io.rancher.sidekicks: tick-data
   # Define a Chronograf service
   chronograf:
     image: chronograf:1.3.8
@@ -58,6 +59,7 @@ services:
       - kapacitor
     labels:
       io.rancher.container.hostname_override: container_name
+      io.rancher.sidekicks: tick-data
   # Define a Kapacitor service
   kapacitor:
     image: kapacitor:1.3.3
@@ -72,6 +74,7 @@ services:
       - "9092:9092"
     labels:
       io.rancher.container.hostname_override: container_name
+      io.rancher.sidekicks: tick-data
   # Define a service for using the influx CLI tool.
   # docker-compose run influxdb-cli
 #  influxdb-cli:
