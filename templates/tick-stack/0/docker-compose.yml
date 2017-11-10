@@ -2,7 +2,7 @@ version: '2'
 services:
   # pre-configured Data Volume Container
   tick-data:
-    image: nmrmsys/tick-data
+    image: nmrmsys/tick-data:v0.1.0
     network_mode: none
     volumes:
         - /etc/telegraf
