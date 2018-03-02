@@ -1,0 +1,10 @@
+version: '2'
+catalog:
+  name: "TICK Stack"
+  version: "v0.1.3"
+services:
+  tick-data:
+  telegraf:
+  influxdb:
+  chronograf:
+  kapacitor:
