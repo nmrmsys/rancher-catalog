@@ -11,7 +11,7 @@ volumes:
 services:
   # Data Volume Configured Container
   tick-data:
-    image: nmrmsys/tick-data:latest
+    image: nmrmsys/tick-data:v0.1.3
     tty: true
     network_mode: none
     volumes:
@@ -29,7 +29,8 @@ services:
     image: telegraf:1.7.0
     volumes:
         - telegraf-conf:/etc/telegraf
-    #ports:
+    ports:
+      - "6514:6514"
     #  - "8092:8092/udp"
     #  - "8094:8094"
     #  - "8125:8125/udp"
