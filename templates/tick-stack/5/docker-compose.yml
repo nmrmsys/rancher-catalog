@@ -11,13 +11,13 @@ volumes:
 services:
   # Data Volume Configured Container
   tick-data:
-    image: nmrmsys/tick-data:v0.1.3
+    image: nmrmsys/tick-data:v0.1.4
     tty: true
     network_mode: none
     volumes:
         - telegraf-conf:/etc/telegraf
         - influxdb-conf:/etc/influxdb
-#        - chronograf-conf:/etc/chronograf
+        - chronograf-conf:/usr/share/chronograf
         - kapacitor-conf:/etc/kapacitor
         - influxdb-data:/var/lib/influxdb
         - chronograf-data:/var/lib/chronograf
@@ -57,10 +57,12 @@ services:
   chronograf:
     image: nmrmsys/chronograf-nightly # chronograf:1.5.0
     volumes:
+        - chronograf-conf:/usr/share/chronograf
         - chronograf-data:/var/lib/chronograf
     environment:
       INFLUXDB_URL: http://influxdb:8086
       KAPACITOR_URL: http://kapacitor:9092
+      CANNED_PATH: /usr/share/chronograf/canned
       FLAX_URL: http://fluxd:8093
     ports:
       - "8888:8888"
